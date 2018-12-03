@@ -1,0 +1,20 @@
+{
+  "name": "cypress-looks-same",
+  "version": "1.0.0",
+  "description": "Cypress plugin for visual regression testing",
+  "repository": "http://github.com/soxtoby/cypress-looks-same",
+  "author": "Simon Oxtoby",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "tsc"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "cypress": "^3.1.2",
+    "typescript": "^3.2.1"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "looks-same": "^4.0.0"
+  }
+}
