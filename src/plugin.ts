@@ -19,19 +19,21 @@ module.exports = function addLooksSamePlugin(on: any, config: Cypress.ConfigOpti
             let actualPath = path.join(snapshotDir, `${snapshotName}.actual.png`);
             let diffPath = path.join(snapshotDir, `${snapshotName}.diff.png`);
 
-            return await fs.pathExists(snapshotPath) && !config.env.updateImageSnapshots
-                ? await compareWithSnapshot(snapshotPath, screenshotPath, actualPath, diffPath, buildDiffConfig(options))
+            return await fs.pathExists(snapshotPath)
+                ? await compareWithSnapshot(snapshotPath, screenshotPath, actualPath, diffPath, buildDiffConfig(options), config)
                 : await updateSnapshot(snapshotPath, screenshotPath, actualPath, diffPath);
         }
     });
 }
 
-async function compareWithSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string, diffConfig: any) {
+async function compareWithSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string, diffConfig: any, cypressConfig: Cypress.ConfigOptions) {
     let isSame = await promisify(looksSame)(snapshotPath, screenshotPath, diffConfig);
 
     if (isSame) {
         await removeGeneratedImages(screenshotPath, actualPath, diffPath);
         return matchResult(snapshotPath, { imagesMatch: true });
+    } else if (cypressConfig.env.updateImageSnapshots) {
+        return await updateSnapshot(snapshotPath, screenshotPath, actualPath, diffPath);
     } else {
         await createActualAndDiffImages(snapshotPath, screenshotPath, diffPath, diffConfig, actualPath);
         return matchResult(snapshotPath, {
