@@ -68,15 +68,22 @@ async function updateSnapshot(snapshotPath: string, screenshotPath: string, actu
 
 function buildDiffConfig(options: Partial<ImageMatchOptions>) {
     let strict = options.strict || options.tolerance === 0;
-    return {
+
+    let diffConfig = {
         strict,
-        tolerance: strict ? undefined : options.tolerance,
-        pixelRatio: options.pixelRatio,
         ignoreCaret: options.ignoreCaret == null ? true : options.ignoreCaret,
         ignoreAntialiasing: options.ignoreAntialiasing == null ? true : options.ignoreAntialiasing,
-        antialiasingTolerance: options.antialiasingTolerance,
         highlightColor: options.highlightColor || '#ff00ff'
-    };
+    } as any;
+
+    if (!strict && options.tolerance != null)
+        diffConfig.tolerance = options.tolerance;
+    if (options.pixelRatio != null)
+        diffConfig.pixelRatio = options.pixelRatio;
+    if (options.antialiasingTolerance != null)
+        diffConfig.antialiasingTolerance = options.antialiasingTolerance;
+
+    return diffConfig;
 }
 
 function matchResult(snapshot: string, results: Partial<ImageMatchResult>): ImageMatchResult {
