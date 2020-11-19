@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { ImageMatchOptions, ImageMatchResult, ImageMatchTaskOptions, matchImageSnapshotTask } from './shared';
 const looksSame = require('looks-same');
 
-module.exports = function addLooksSamePlugin(on: any, config: Cypress.ConfigOptions) {
+module.exports = function addLooksSamePlugin(on: any, config: Cypress.ResolvedConfigOptions) {
     let screenshotPath = '';
 
     on('after:screenshot', (e: { path: string }) => screenshotPath = e.path);
@@ -14,7 +14,7 @@ module.exports = function addLooksSamePlugin(on: any, config: Cypress.ConfigOpti
         [matchImageSnapshotTask]: async (options: ImageMatchTaskOptions): Promise<ImageMatchResult> => {
             let snapshotBaseDir = 'cypress/snapshots';
             let snapshotName = `${options.spec} - ${options.name}`;
-            let snapshotDir = path.dirname(path.join(snapshotBaseDir, path.relative(config.screenshotsFolder, screenshotPath)));
+            let snapshotDir = path.dirname(path.join(snapshotBaseDir, path.relative(config.screenshotsFolder || "cypress/screenshots", screenshotPath)));
             let snapshotPath = path.join(snapshotDir, `${snapshotName}.png`);
             let actualPath = path.join(snapshotDir, `${snapshotName}.actual.png`);
             let diffPath = path.join(snapshotDir, `${snapshotName}.diff.png`);
@@ -26,7 +26,7 @@ module.exports = function addLooksSamePlugin(on: any, config: Cypress.ConfigOpti
     });
 }
 
-async function compareWithSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string, diffConfig: any, cypressConfig: Cypress.ConfigOptions) {
+async function compareWithSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string, diffConfig: any, cypressConfig: Cypress.ResolvedConfigOptions) {
     let isSame = await promisify(looksSame)(snapshotPath, screenshotPath, diffConfig);
 
     if (isSame) {

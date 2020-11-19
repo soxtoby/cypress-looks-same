@@ -9,7 +9,7 @@ export default function (defaults?: Partial<ImageMatchOptions>) {
     Cypress.Commands.add('shouldLookSameAs', { prevSubject: ['optional', 'element'] }, shouldLookSameAs);
     Cypress.Commands.add('compareWithImageSnapshot', { prevSubject: ['optional', 'element'] }, compareWithImageSnapshot);
 
-    function shouldLookSameAs(this: { test: Mocha.ITest }, element: JQuery<HTMLElement>, name: string, options: Partial<ImageMatchOptions> = {}) {
+    function shouldLookSameAs(this: { test: Mocha.Test }, element: JQuery<HTMLElement>, name: string, options: Partial<ImageMatchOptions> = {}) {
         let log = createLog(name);
 
         return cy.wrap(element, { log: false })
@@ -27,7 +27,7 @@ export default function (defaults?: Partial<ImageMatchOptions>) {
             });
     }
 
-    function compareWithImageSnapshot(this: { test: Mocha.ITest }, element: JQuery<HTMLElement>, name: string, options: Partial<ImageMatchOptions & Cypress.Loggable> = {}) {
+    function compareWithImageSnapshot(this: { test: Mocha.Test }, element: JQuery<HTMLElement>, name: string, options: Partial<ImageMatchOptions & Cypress.Loggable> = {}) {
         options = { ...defaults, ...options };
 
         let spec = this.test.title;
