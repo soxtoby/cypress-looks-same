@@ -12,9 +12,8 @@ module.exports = function addLooksSamePlugin(on: any, config: Cypress.ResolvedCo
 
     on('task', {
         [matchImageSnapshotTask]: async (options: ImageMatchTaskOptions): Promise<ImageMatchResult> => {
-            let snapshotBaseDir = 'cypress/snapshots';
             let snapshotName = `${options.spec} - ${options.name}`;
-            let snapshotDir = path.dirname(path.join(snapshotBaseDir, path.relative(config.screenshotsFolder || "cypress/screenshots", screenshotPath)));
+            let snapshotDir = 'cypress/snapshots';
             let snapshotPath = path.join(snapshotDir, `${snapshotName}.png`);
             let actualPath = path.join(snapshotDir, `${snapshotName}.actual.png`);
             let diffPath = path.join(snapshotDir, `${snapshotName}.diff.png`);

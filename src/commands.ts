@@ -30,7 +30,7 @@ export default function (defaults?: Partial<ImageMatchOptions>) {
     function compareWithImageSnapshot(this: { test: Mocha.Test }, element: JQuery<HTMLElement>, name: string, options: Partial<ImageMatchOptions & Cypress.Loggable> = {}) {
         options = { ...defaults, ...options };
 
-        let spec = this.test.title;
+        let spec = this.test.fullTitle();
         let log = options.log === false
             ? null
             : createLog(name, element);
