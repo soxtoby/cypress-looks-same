@@ -61,11 +61,12 @@ async function createActualAndDiffImages(snapshotPath: string, screenshotPath: s
 }
 
 async function updateSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string) {
+    let newSnapshot = !await fs.pathExists(snapshotPath);
     await fs.ensureDir(path.dirname(snapshotPath));
     await fs.rename(screenshotPath, snapshotPath);
     await fs.remove(actualPath);
     await fs.remove(diffPath);
-    return matchResult(snapshotPath, { snapshotUpdated: true });
+    return matchResult(snapshotPath, { imagesMatch: newSnapshot, snapshotUpdated: true });
 }
 
 function buildDiffConfig(options: Partial<ImageMatchOptions>) {
