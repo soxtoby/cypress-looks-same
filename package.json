@@ -5,6 +5,11 @@
   "repository": "http://github.com/soxtoby/cypress-looks-same",
   "author": "Simon Oxtoby",
   "license": "MIT",
+  "files": [
+    "*.js",
+    "*.js.map",
+    "*.d.ts"
+  ],
   "scripts": {
     "prepare": "tsc"
   },
