@@ -26,9 +26,9 @@ module.exports = function addLooksSamePlugin(on: any, config: Cypress.ResolvedCo
 }
 
 async function compareWithSnapshot(snapshotPath: string, screenshotPath: string, actualPath: string, diffPath: string, diffConfig: any, cypressConfig: Cypress.ResolvedConfigOptions) {
-    let isSame = await promisify(looksSame)(snapshotPath, screenshotPath, diffConfig);
+    let result = await promisify(looksSame)(snapshotPath, screenshotPath, diffConfig);
 
-    if (isSame) {
+    if (result.equal) {
         await removeGeneratedImages(screenshotPath, actualPath, diffPath);
         return matchResult(snapshotPath, { imagesMatch: true });
     } else if (cypressConfig.env.updateImageSnapshots) {
